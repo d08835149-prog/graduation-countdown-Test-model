@@ -8,9 +8,8 @@
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
-    /* 더 밝고 화사한 테마 */
     --bg: #0f101a; 
-    --text: #ffffff; /* 순백색으로 변경 */
+    --text: #ffffff;
     --muted: #d1d5db;
     --faint: #9ca3af;
   }
@@ -26,25 +25,28 @@
   .quote-item { 
     font-family: 'DM Mono', monospace; 
     font-size: 11px; 
-    color: var(--muted); /* 조금 더 밝게 */
+    color: var(--muted); 
     padding: 25px 10px; 
     text-align: center;
-    white-space: normal; /* 긴 문구 줄바꿈 허용 */
+    white-space: normal;
     line-height: 1.4;
   }
   @keyframes scroll { from { transform: translateY(-100%); } to { transform: translateY(100%); } }
 
-  /* ── 기존 UI (밝게 조정) ── */
+  /* ── UI ── */
   .page { position: relative; z-index: 1; max-width: 900px; margin: 0 auto; padding: 3rem 1.5rem 5rem; }
   header { text-align: center; margin-bottom: 3.5rem; }
-  .eyebrow { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--faint); text-transform: uppercase; margin-bottom: 1rem; }
-  header h1 { font-size: clamp(2.4rem, 6vw, 4rem); font-weight: 800; color: #fff; }
   .hero { border-radius: 20px; padding: 3rem 2rem; text-align: center; margin-bottom: 2rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); }
-  .hero-number { font-size: clamp(5rem, 18vw, 9rem); font-weight: 800; color: #fff; }
-  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+  .hero-number { font-size: clamp(5rem, 18vw, 9rem); font-weight: 800; }
+  
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; }
   .card { border-radius: 16px; padding: 1.5rem; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); }
-  .t-num { font-family: 'DM Mono', monospace; font-size: 1.4rem; display: block; color: #fff; }
-  .t-unit { font-size: 9px; color: var(--faint); text-transform: uppercase; }
+  
+  /* ── 일렬로 배치된 타이머 ── */
+  .timer-row { display: flex; justify-content: center; gap: 15px; margin-top: 15px; }
+  .t-block { text-align: center; }
+  .t-num { font-family: 'DM Mono', monospace; font-size: 1.2rem; font-weight: 600; display: block; }
+  .t-unit { font-size: 8px; color: var(--faint); text-transform: uppercase; display: block; }
 </style>
 </head>
 <body>
@@ -56,15 +58,12 @@
 
 <div class="page">
   <header>
-    <p class="eyebrow">Class of 2026 ✦ Final Stretch</p>
     <h1>Almost There.</h1>
-    <p class="subtitle" style="color:var(--faint)">Every second is one step closer to freedom.</p>
   </header>
 
   <div class="hero">
-    <p class="hero-label" style="color:var(--faint)">🏫 School days remaining</p>
+    <p>🏫 School days remaining</p>
     <div class="hero-number" id="school-num"></div>
-    <p class="hero-unit">days left</p>
   </div>
 
   <div class="cards">
@@ -75,8 +74,7 @@
 </div>
 
 <script>
-const quotes = ["Your life is your story. Write it well.", "The best time is now", "Not everything is a competition, but if you don't treat it like that, you will never be successful.", "School taught me many things, for example, sleep 3 hours at night and on the next day stay alive during the class", "Tired", "A false spotlight shines to create the false sense of victory.", "Dream big, work hard, stay kind.", "Brain conflagrated, graduation successful.", "You decide who you are", "Gotta stay down and get it, I know that it's gon' be alright", "I knew this moment'd come, now its my time.", "Let your light shine before others", "What you learn today shapes your tomorrow.", "I wish that time would last forever", "Graduating just to go back to school again", "The saddest thing in life is wasted talent, and that the choices you make shape your life forever.", "Just another Bronx tale", "Sometimes it's the journey that teaches you a lot about your destination", "My excuse is that I'm young.", "Let your failures teach you how to dougie", "Don't let others write your story; let ChatGPT and Google write it. That's how you make less mistakes.", "Hard work never betrays you.", "Sometimes you will never know the value of a moment until it becomes a memory", "I should've paid 50 robux to skip this stage", "People are going to judge you anyways, so you might as well do what you want.", "Thank you, ChatGPT for helping me through out this year.", "The best way to predict the future is to create it", "Normal is boring.", "Swing hard, even if you miss", "Hard work beats talent when talent doesn't work hard", "Growth begins where comfort ends.", "How lucky am I to have something to make saying goodbye so hard.", "You miss 100% of the shots you don't take", "Even this quote was late.", "The most important thing in life is found in the journey to achieve it", "May today's period be the first letter of tomorrow.", "It's not about being the best it's about being better than yourself than you were yesterday", "Thanks for the good memories", "Inspired by the Fear of being Average", "I didn't get here alone - I had right people behind me.", "Endless gratitude to my mom, dad, and my brother", "Now it's time to turn my dreams into something I'm proud of", "Don't look back, that's not the way you're going.", "Go confidently in the direction of your dreams. Live the life you have imagined", "Class of 2026"];
-
+const quotes = ["Your life is your story.", "The best time is now", "Not everything is a competition.", "Dream big, work hard.", "Class of 2026"]; // 요약된 리스트
 const colLeft = document.getElementById('col-left');
 const colRight = document.getElementById('col-right');
 quotes.forEach((q, i) => {
@@ -87,15 +85,26 @@ quotes.forEach((q, i) => {
 const SCHOOL_DATES = ['2026-06-01','2026-06-02','2026-06-03','2026-06-04','2026-06-08','2026-06-09','2026-06-10','2026-06-11','2026-06-12','2026-06-15','2026-06-16','2026-06-17','2026-06-18','2026-06-19','2026-06-22','2026-06-23','2026-06-24','2026-06-25'];
 const events = [{ id: 'grad', target: new Date(2026, 5, 15) }, { id: 'trip', target: new Date(2026, 5, 22) }, { id: 'last', target: new Date(2026, 5, 25) }];
 
-function tick() {
+function updateTimer() {
   document.getElementById('school-num').textContent = SCHOOL_DATES.filter(d => d >= new Date().toISOString().slice(0, 10)).length;
   events.forEach(e => {
     const ms = e.target - new Date();
-    const d = Math.floor(ms / 86400000); const h = Math.floor((ms % 86400000) / 3600000);
-    document.getElementById('timer-' + e.id).innerHTML = `<div class="timer-row"><div class="t-block"><span class="t-num">${d}</span><span class="t-unit">days</span></div><div class="t-block"><span class="t-num">${h}</span><span class="t-unit">hrs</span></div></div>`;
+    const d = Math.floor(ms / 86400000);
+    const h = Math.floor((ms % 86400000) / 3600000);
+    const m = Math.floor((ms % 3600000) / 60000);
+    const s = Math.floor((ms % 60000) / 1000);
+    const ms2 = Math.floor((ms % 1000) / 10);
+    document.getElementById('timer-' + e.id).innerHTML = `
+      <div class="timer-row">
+        <div class="t-block"><span class="t-num">${d}</span><span class="t-unit">D</span></div>
+        <div class="t-block"><span class="t-num">${h}</span><span class="t-unit">H</span></div>
+        <div class="t-block"><span class="t-num">${m}</span><span class="t-unit">M</span></div>
+        <div class="t-block"><span class="t-num">${s}</span><span class="t-unit">S</span></div>
+        <div class="t-block"><span class="t-num">${ms2}</span><span class="t-unit">MS</span></div>
+      </div>`;
   });
 }
-setInterval(tick, 1000); tick();
+setInterval(updateTimer, 50); updateTimer();
 </script>
 </body>
 </html>
