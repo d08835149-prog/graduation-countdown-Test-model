@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Graduation Countdown</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --purple-l: #AFA9EC; --purple-m: #7F77DD; --purple-d: #534AB7;
+    --coral-l: #F0997B; --coral-m: #D85A30; --coral-d: #993C1D;
+    --teal-l: #5DCAA5; --teal-m: #1D9E75; --teal-d: #0F6E56;
+    --amber-m: #EF9F27; --bg: #0a0a0f; --text: #f0efff;
+    --muted: rgba(240,239,255,0.5); --faint: rgba(240,239,255,0.25);
+  }
+  body { background: var(--bg); color: var(--text); font-family: 'Syne', sans-serif; min-height: 100vh; overflow-x: hidden; }
+
+  /* ── Quotes Animation ── */
+  .quotes-wrapper {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+    display: flex; justify-content: space-between; pointer-events: none;
+    z-index: 0; padding: 0 5%; overflow: hidden;
+  }
+  .quote-col { width: 20%; height: 100%; display: flex; flex-direction: column; animation: scroll 60s linear infinite; }
+  .quote-item { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--faint); padding: 20px 0; text-align: center; }
+  @keyframes scroll { from { transform: translateY(-100%); } to { transform: translateY(100%); } }
+
+  /* ── 기존 UI ── */
+  .page { position: relative; z-index: 1; max-width: 900px; margin: 0 auto; padding: 3rem 1.5rem 5rem; }
+  header { text-align: center; margin-bottom: 3.5rem; }
+  .eyebrow { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.2em; color: var(--muted); text-transform: uppercase; margin-bottom: 1rem; }
+  header h1 { font-size: clamp(2.4rem, 6vw, 4rem); font-weight: 800; background: linear-gradient(135deg, #fff 20%, var(--purple-l) 55%, var(--teal-l) 90%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .hero { border-radius: 20px; padding: 3rem 2rem; text-align: center; margin-bottom: 2rem; background: linear-gradient(135deg, #2a2660 0%, #1a3d2b 55%, #3d1f10 100%); border: 1px solid rgba(255,255,255,0.08); }
+  .hero-number { font-size: clamp(5rem, 18vw, 9rem); font-weight: 800; color: #fff; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+  .card { border-radius: 16px; padding: 1.5rem; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.03); }
+  .timer-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-top: 10px; }
+  .t-num { font-family: 'DM Mono', monospace; font-size: 1.2rem; display: block; }
+  .t-unit { font-size: 8px; color: var(--muted); text-transform: uppercase; }
+</style>
+</head>
+<body>
+
+<div class="quotes-wrapper">
+  <div class="quote-col" id="col-left"></div>
+  <div class="quote-col" id="col-right"></div>
+</div>
+
+<div class="page">
+  <header>
+    <p class="eyebrow">Class of 2026 ✦ Final Stretch</p>
+    <h1>Almost There.</h1>
+    <p class="subtitle">Every second is one step closer to freedom.</p>
+    <span id="live-date"></span>
+  </header>
+
+  <div class="hero">
+    <p class="hero-label">🏫 School days remaining</p>
+    <div class="hero-number" id="school-num"></div>
+    <p class="hero-unit">days left</p>
+  </div>
+
+  <div class="cards">
+    <div class="card"><div class="card-title">Graduation Ceremony</div><div id="timer-grad"></div></div>
+    <div class="card"><div class="card-title">Graduation Trip</div><div id="timer-trip"></div></div>
+    <div class="card"><div class="card-title">Last Day of School</div><div id="timer-last"></div></div>
+  </div>
+</div>
+
+<script>
+const quotes = ["Your life is your story.", "The best time is now", "Not everything is a competition", "School taught me sleep 3 hours", "Tired", "A false spotlight", "Dream big, work hard, stay kind.", "Brain conflagrated", "Graduation successful", "You decide who you are", "Gotta stay down and get it", "I knew this moment'd come", "Let your light shine", "What you learn today shapes tomorrow", "I wish time would last forever", "Graduating to go back to school", "Wasted talent is the saddest thing", "Choices shape your life", "Just another Bronx tale", "Journey teaches you about destination", "My excuse is I'm young", "Let failures teach you", "Don't let others write your story", "Hard work never betrays you", "Value of a moment becomes a memory", "Should've skipped this stage", "Not taken at home", "People judge you anyways", "Thank you, ChatGPT", "Create the future", "Normal is boring", "Swing hard, even if you miss", "Hard work beats talent", "Growth begins where comfort ends", "Goodbye is so hard", "You miss 100% of the shots", "Never give up on what you love", "Even this quote was late", "Cherish every moment", "First letter of tomorrow", "Be better than yesterday", "Thanks for the good memories", "Fear of being Average", "I didn't get here alone", "Endless gratitude", "Turn dreams into something proud", "Don't look back", "Go confidently", "Live the life you imagined", "Class of 2026"];
+
+const colLeft = document.getElementById('col-left');
+const colRight = document.getElementById('col-right');
+quotes.forEach((q, i) => {
+  const div = document.createElement('div'); div.className = 'quote-item'; div.textContent = q;
+  if (i < 25) colLeft.appendChild(div); else colRight.appendChild(div);
+});
+
+const SCHOOL_DATES = ['2026-06-01','2026-06-02','2026-06-03','2026-06-04','2026-06-08','2026-06-09','2026-06-10','2026-06-11','2026-06-12','2026-06-15','2026-06-16','2026-06-17','2026-06-18','2026-06-19','2026-06-22','2026-06-23','2026-06-24','2026-06-25'];
+const events = [{ id: 'grad', target: new Date(2026, 5, 15) }, { id: 'trip', target: new Date(2026, 5, 22) }, { id: 'last', target: new Date(2026, 5, 25) }];
+
+function tick() {
+  document.getElementById('school-num').textContent = SCHOOL_DATES.filter(d => d >= new Date().toISOString().slice(0, 10)).length;
+  events.forEach(e => {
+    const ms = e.target - new Date();
+    const d = Math.floor(ms / 86400000); const h = Math.floor((ms % 86400000) / 3600000);
+    document.getElementById('timer-' + e.id).innerHTML = `<div class="timer-row"><div class="t-block"><span class="t-num">${d}</span><span class="t-unit">days</span></div><div class="t-block"><span class="t-num">${h}</span><span class="t-unit">hrs</span></div></div>`;
+  });
+}
+setInterval(tick, 1000); tick();
+</script>
+</body>
+</html>
